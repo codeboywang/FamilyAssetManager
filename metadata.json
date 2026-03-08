@@ -1,0 +1,5 @@
+{
+  "name": "Family Asset Manager",
+  "description": "A simple application to track family assets, liabilities, and net worth over time.",
+  "requestFramePermissions": []
+}

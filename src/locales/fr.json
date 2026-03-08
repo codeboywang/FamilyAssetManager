@@ -1,0 +1,82 @@
+{
+  "common": {
+    "dashboard": "Tableau de bord",
+    "assets": "Actifs",
+    "members": "Membres",
+    "update": "Mise à jour",
+    "settings": "Paramètres",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "loading": "Chargement...",
+    "confirmDelete": "Êtes-vous sûr ?",
+    "saved": "Enregistré !",
+    "select": "Sélectionner..."
+  },
+  "dashboard": {
+    "title": "Aperçu Financier",
+    "subtitle": "Suivez la santé financière de votre famille",
+    "netWorth": "Valeur Nette",
+    "totalAssets": "Total des Actifs",
+    "totalLiabilities": "Total des Passifs",
+    "trend": "Tendance de la Valeur Nette",
+    "allocation": "Répartition des Actifs",
+    "assets": "Actifs",
+    "liabilities": "Passifs"
+  },
+  "assets": {
+    "title": "Actifs et Comptes",
+    "subtitle": "Gérer tous vos comptes financiers",
+    "addAccount": "Ajouter un Compte",
+    "accountName": "Nom du Compte",
+    "initialAmount": "Montant Initial",
+    "owner": "Propriétaire",
+    "category": "Catégorie",
+    "notes": "Notes",
+    "noAccounts": "Pas encore de comptes.",
+    "createAccount": "Créer un Compte",
+    "editAccount": "Modifier le Compte",
+    "accountPlaceholder": "ex. Compte Chèque",
+    "deleteConfirm": "Supprimer ce compte ? L'historique sera conservé mais il disparaîtra des listes."
+  },
+  "members": {
+    "title": "Membres de la Famille",
+    "subtitle": "Gérer qui possède les actifs",
+    "addMember": "Ajouter un Membre",
+    "namePlaceholder": "Nom (ex. Papa)",
+    "rolePlaceholder": "Rôle (Optionnel)",
+    "defaultRole": "Membre",
+    "deleteConfirm": "Êtes-vous sûr ? Cela ne supprimera pas leurs comptes mais pourrait causer des problèmes d'affichage."
+  },
+  "record": {
+    "title": "Aperçu Mensuel",
+    "subtitle": "Mettre à jour les valeurs des actifs pour le mois",
+    "saveChanges": "Enregistrer les Modifications"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Gérer les préférences de l'application",
+    "language": "Langue",
+    "selectLanguage": "Choisir la Langue",
+    "manageCategories": "Gérer les Catégories",
+    "addCategory": "Ajouter une Catégorie",
+    "categoryName": "Nom de la Catégorie",
+    "categoryType": "Type",
+    "asset": "Actif",
+    "liability": "Passif",
+    "cannotDeleteCategory": "Impossible de supprimer la catégorie car elle est utilisée par des comptes."
+  },
+  "categories": {
+    "Cash & Deposits": "Espèces et Dépôts",
+    "Stocks & Funds": "Actions et Fonds",
+    "Insurance": "Assurance",
+    "Real Estate": "Immobilier",
+    "Vehicles": "Véhicules",
+    "Receivables": "Créances",
+    "Credit Cards": "Cartes de Crédit",
+    "Loans": "Prêts",
+    "Other Liabilities": "Autres Passifs"
+  }
+}

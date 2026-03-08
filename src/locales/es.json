@@ -1,0 +1,82 @@
+{
+  "common": {
+    "dashboard": "Panel",
+    "assets": "Activos",
+    "members": "Miembros",
+    "update": "Actualizar",
+    "settings": "Ajustes",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Añadir",
+    "loading": "Cargando...",
+    "confirmDelete": "¿Estás seguro?",
+    "saved": "¡Guardado!",
+    "select": "Seleccionar..."
+  },
+  "dashboard": {
+    "title": "Resumen Financiero",
+    "subtitle": "Seguimiento de la salud financiera familiar",
+    "netWorth": "Patrimonio Neto",
+    "totalAssets": "Activos Totales",
+    "totalLiabilities": "Pasivos Totales",
+    "trend": "Tendencia del Patrimonio",
+    "allocation": "Asignación de Activos",
+    "assets": "Activos",
+    "liabilities": "Pasivos"
+  },
+  "assets": {
+    "title": "Activos y Cuentas",
+    "subtitle": "Gestionar todas las cuentas financieras",
+    "addAccount": "Añadir Cuenta",
+    "accountName": "Nombre de la Cuenta",
+    "initialAmount": "Monto Inicial",
+    "owner": "Propietario",
+    "category": "Categoría",
+    "notes": "Notas",
+    "noAccounts": "Aún no hay cuentas.",
+    "createAccount": "Crear Cuenta",
+    "editAccount": "Editar Cuenta",
+    "accountPlaceholder": "ej. Cuenta Corriente",
+    "deleteConfirm": "¿Eliminar esta cuenta? El historial se conservará pero desaparecerá de las listas."
+  },
+  "members": {
+    "title": "Miembros de la Familia",
+    "subtitle": "Gestionar quién posee los activos",
+    "addMember": "Añadir Miembro",
+    "namePlaceholder": "Nombre (ej. Papá)",
+    "rolePlaceholder": "Rol (Opcional)",
+    "defaultRole": "Miembro",
+    "deleteConfirm": "¿Estás seguro? Esto no eliminará sus cuentas pero podría causar problemas de visualización."
+  },
+  "record": {
+    "title": "Instantánea Mensual",
+    "subtitle": "Actualizar valores de activos del mes",
+    "saveChanges": "Guardar Cambios"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "subtitle": "Gestionar preferencias de la aplicación",
+    "language": "Idioma",
+    "selectLanguage": "Seleccionar Idioma",
+    "manageCategories": "Gestionar Categorías",
+    "addCategory": "Añadir Categoría",
+    "categoryName": "Nombre de Categoría",
+    "categoryType": "Tipo",
+    "asset": "Activo",
+    "liability": "Pasivo",
+    "cannotDeleteCategory": "No se puede eliminar la categoría porque está asignada a cuentas."
+  },
+  "categories": {
+    "Cash & Deposits": "Efectivo y Depósitos",
+    "Stocks & Funds": "Acciones y Fondos",
+    "Insurance": "Seguros",
+    "Real Estate": "Bienes Raíces",
+    "Vehicles": "Vehículos",
+    "Receivables": "Cuentas por Cobrar",
+    "Credit Cards": "Tarjetas de Crédito",
+    "Loans": "Préstamos",
+    "Other Liabilities": "Otros Pasivos"
+  }
+}
