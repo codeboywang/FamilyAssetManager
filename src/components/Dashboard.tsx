@@ -60,6 +60,49 @@ export function Dashboard() {
       return acc;
     }, []);
 
+  const CustomPieTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0];
+      return (
+        <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-100">
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: data.payload.fill }} />
+              <span className="text-gray-600">{t(`categories.${data.name}`, { defaultValue: data.name }) as string}</span>
+            </div>
+            <span className="font-mono font-medium text-gray-900">
+              {formatCurrency(data.value)}
+            </span>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-100">
+          <p className="font-medium text-gray-900 mb-2">{label}</p>
+          <div className="space-y-1">
+            {payload.map((entry: any, index: number) => (
+              <div key={index} className="flex items-center justify-between gap-4 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
+                  <span className="text-gray-600">{entry.name}</span>
+                </div>
+                <span className="font-mono font-medium text-gray-900">
+                  {formatCurrency(entry.value)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   const renderChart = () => {
     if (viewDimension === 'family') {
       if (viewMetric === 'overview') {
@@ -74,10 +117,7 @@ export function Dashboard() {
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
             <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 12}} />
             <YAxis axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 12}} tickFormatter={(val) => `¥${val/1000}k`} />
-            <Tooltip 
-              contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'}}
-              formatter={(value: number) => formatCurrency(value)}
-            />
+            <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Area type="monotone" dataKey="assets" stroke="#4F46E5" strokeWidth={2} fillOpacity={1} fill="url(#colorAssets)" name={t('dashboard.assets')} />
             <Area type="monotone" dataKey="liabilities" stroke="#EF4444" strokeWidth={2} fill="none" name={t('dashboard.liabilities')} />
@@ -94,10 +134,7 @@ export function Dashboard() {
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
             <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 12}} />
             <YAxis axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 12}} tickFormatter={(val) => `¥${val/1000}k`} />
-            <Tooltip 
-              contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'}}
-              formatter={(value: number) => formatCurrency(value)}
-            />
+            <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Line type="monotone" dataKey={dataKey} stroke={color} strokeWidth={2} dot={{r: 4}} name={name} />
           </LineChart>
@@ -120,10 +157,7 @@ export function Dashboard() {
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
           <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 12}} />
           <YAxis axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 12}} tickFormatter={(val) => `¥${val/1000}k`} />
-          <Tooltip 
-            contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'}}
-            formatter={(value: number) => formatCurrency(value)}
-          />
+          <Tooltip content={<CustomTooltip />} />
           <Legend />
           {memberNames.map((member, index) => (
             <Line 
@@ -365,7 +399,7 @@ export function Dashboard() {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                <Tooltip content={<CustomPieTooltip />} />
               </PieChart>
             </ResponsiveContainer>
           </div>

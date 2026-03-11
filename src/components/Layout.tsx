@@ -67,7 +67,7 @@ export function Layout({ children, activeTab, onTabChange, onLogout }: LayoutPro
       </nav>
 
       {/* Mobile Header */}
-      <div className="md:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between">
+      <div className="md:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between sticky top-0 z-40">
          <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
             <span className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
               <Wallet size={18} />
@@ -92,16 +92,16 @@ export function Layout({ children, activeTab, onTabChange, onLogout }: LayoutPro
       </main>
 
       {/* Mobile Bottom Nav */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around p-2 pb-safe z-50">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex overflow-x-auto hide-scrollbar p-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] z-50 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
         {navItems.map((item) => (
           <button
             key={item.id}
             onClick={() => onTabChange(item.id)}
             className={cn(
-              "flex flex-col items-center gap-1 p-2 rounded-lg text-xs font-medium w-full",
+              "flex flex-col items-center gap-1 p-2 rounded-lg text-xs font-medium min-w-[72px] flex-shrink-0 transition-colors",
               activeTab === item.id
-                ? "text-indigo-600"
-                : "text-gray-500"
+                ? "text-indigo-600 bg-indigo-50"
+                : "text-gray-500 hover:bg-gray-50"
             )}
           >
             <item.icon size={20} />

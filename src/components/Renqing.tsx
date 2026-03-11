@@ -483,23 +483,23 @@ export function Renqing() {
 
           <div className="space-y-4">
             {records.map(record => (
-              <div key={record.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:bg-gray-50 transition-colors">
+              <div key={record.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-4">
                   <div className={cn(
-                    "w-10 h-10 rounded-full flex items-center justify-center",
+                    "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0",
                     record.type === 'IN' ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
                   )}>
                     {record.type === 'IN' ? <ArrowDownLeft size={20} /> : <ArrowUpRight size={20} />}
                   </div>
-                  <div>
-                    <div className="font-medium text-gray-900">{record.person} - {record.event}</div>
-                    <div className="text-sm text-gray-500 flex items-center gap-2">
-                      <Calendar size={12} />
-                      {record.record_date} • {record.item}
+                  <div className="min-w-0">
+                    <div className="font-medium text-gray-900 truncate">{record.person} - {record.event}</div>
+                    <div className="text-sm text-gray-500 flex items-center gap-2 truncate">
+                      <Calendar size={12} className="flex-shrink-0" />
+                      <span className="truncate">{record.record_date} • {record.item}</span>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto pl-14 sm:pl-0">
                   {record.amount !== null && record.amount !== undefined && (
                     <div className={cn(
                       "font-bold text-lg",
@@ -509,10 +509,10 @@ export function Renqing() {
                     </div>
                   )}
                   <div className="flex gap-2">
-                    <button onClick={() => handleEdit(record)} className="text-gray-400 hover:text-indigo-600">
+                    <button onClick={() => handleEdit(record)} className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
                       {t('common.edit') || 'Edit'}
                     </button>
-                    <button onClick={() => handleDelete(record.id)} className="text-gray-400 hover:text-red-600">
+                    <button onClick={() => handleDelete(record.id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                       {t('common.delete') || 'Delete'}
                     </button>
                   </div>

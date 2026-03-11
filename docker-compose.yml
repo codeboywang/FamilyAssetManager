@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  family-assets:
+    build: .
+    container_name: family-assets-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    environment:
+      - NODE_ENV=production
+      - PORT=3000

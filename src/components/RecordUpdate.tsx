@@ -300,11 +300,11 @@ export function RecordUpdate({ currentUser }: { currentUser?: any }) {
               <div className="divide-y divide-gray-100">
                 {memberAccounts.map((account: any) => (
                   <div key={account.id} className="p-4 sm:p-6 flex flex-col gap-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <span className={cn(
-                            "text-xs font-medium px-2 py-0.5 rounded",
+                            "text-xs font-medium px-2 py-0.5 rounded whitespace-nowrap",
                             account.category_type === 'ASSET' ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
                           )}>
                             {t(`categories.${account.category_name}`, { defaultValue: account.category_name }) as string}
@@ -314,18 +314,18 @@ export function RecordUpdate({ currentUser }: { currentUser?: any }) {
                           {(records[account.id] as any)?.id && (
                             <button 
                               onClick={() => fetchHistory((records[account.id] as any).id, account.currency)}
-                              className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors ml-2"
+                              className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors ml-auto sm:ml-2 flex-shrink-0"
                               title={t('record.history')}
                             >
-                              <History size={14} />
+                              <History size={16} />
                             </button>
                           )}
                         </div>
                         {account.notes && <p className="text-xs text-gray-400 mt-1 truncate">{account.notes}</p>}
                       </div>
 
-                      <div className="flex flex-col items-end gap-1 w-full sm:w-auto">
-                        <div className="flex items-center gap-4 w-full sm:w-auto">
+                      <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
                           <div className="relative flex-1 sm:w-48">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-mono">
                               {getCurrencySymbol(account.currency)}
@@ -343,20 +343,23 @@ export function RecordUpdate({ currentUser }: { currentUser?: any }) {
                               readOnly={account.category_name === 'Loans'}
                             />
                           </div>
-                          <button
-                            onClick={() => toggleExpand(account.id)}
-                            className="px-3 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 text-sm font-medium whitespace-nowrap"
-                          >
-                            {expandedAccounts[account.id] ? t('common.collapse') || 'Collapse' : t('common.expand') || 'Expand'}
-                            {records[account.id]?.items?.length ? ` (${records[account.id].items.length})` : ''}
-                          </button>
-                          <input
-                            type="text"
-                            className="flex-1 sm:w-48 px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm"
-                            placeholder={t('assets.notes')}
-                            value={records[account.id]?.notes || ''}
-                            onChange={e => handleInputChange(account.id, 'notes', e.target.value)}
-                          />
+                          
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => toggleExpand(account.id)}
+                              className="flex-1 sm:flex-none px-3 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 text-sm font-medium whitespace-nowrap flex items-center justify-center"
+                            >
+                              {expandedAccounts[account.id] ? t('common.collapse') || 'Collapse' : t('common.expand') || 'Expand'}
+                              {records[account.id]?.items?.length ? ` (${records[account.id].items.length})` : ''}
+                            </button>
+                            <input
+                              type="text"
+                              className="flex-[2] sm:flex-1 sm:w-48 px-3 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm"
+                              placeholder={t('assets.notes')}
+                              value={records[account.id]?.notes || ''}
+                              onChange={e => handleInputChange(account.id, 'notes', e.target.value)}
+                            />
+                          </div>
                         </div>
                         {records[account.id]?.updated_at && (
                           <span className="text-[10px] text-gray-400">
