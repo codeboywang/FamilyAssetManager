@@ -12,7 +12,14 @@
     "loginButton": "Login",
     "setupButton": "Create Admin",
     "passwordMismatch": "Passwords do not match",
-    "logout": "Logout"
+    "logout": "Logout",
+    "adminName": "Admin Name",
+    "selectUser": "Select User",
+    "setupDesc": "Create your first admin account",
+    "loginDesc": "Please login to continue",
+    "enterName": "Enter your name",
+    "createPassword": "Create a password",
+    "enterPassword": "Enter password"
   },
   "families": {
     "title": "Family Management",
@@ -50,7 +57,17 @@
     "search": "Search",
     "logout": "Logout",
     "export": "Export",
-    "decrypt": "Decrypt & Import"
+    "decrypt": "Decrypt & Import",
+    "notes": "Notes",
+    "saveChanges": "Save Changes",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "week": "Week",
+    "month": "Month",
+    "quarter": "Quarter",
+    "year": "Year",
+    "overview": "Overview",
+    "confirm": "Confirm"
   },
   "renqing": {
     "title": "Renqing (Favors)",
@@ -119,6 +136,8 @@
     "title": "Family Members",
     "subtitle": "Manage who owns the assets",
     "addMember": "Add Member",
+    "editMember": "Edit Member",
+    "role": "Role",
     "namePlaceholder": "Name (e.g. Dad)",
     "rolePlaceholder": "Role (Optional)",
     "defaultRole": "Member",
@@ -186,7 +205,9 @@
       "yearly": "Yearly",
       "monthly": "Monthly",
       "one-time": "One-time"
-    }
+    },
+    "payments": "Insurance Payments",
+    "noPayments": "No insurance payments this month"
   },
   "settings": {
     "title": "Settings",
@@ -216,7 +237,11 @@
     "decryptBackup": "Decrypt Backup",
     "enterImportPassword": "Enter the password used to encrypt this backup.",
     "decryptFailed": "Decryption failed. Wrong password?",
-    "importFailed": "Import failed."
+    "importFailed": "Import failed.",
+    "confirmMockData": "Are you sure you want to generate mock data? This will add fake records to your database.",
+    "mockDataFailed": "Failed to generate mock data",
+    "generateMockData": "Generate Mock Data",
+    "mockDataSuccess": "Mock data generated successfully"
   },
   "categories": {
     "Cash & Demand Deposits": "Cash & Demand Deposits",
@@ -245,6 +270,14 @@
     "expired": "Expired",
     "usedUp": "Used Up",
     "noBenefits": "No benefits recorded",
-    "addFirst": "Add your first benefit to start tracking."
+    "addFirst": "Add your first benefit to start tracking.",
+    "usages": "Benefit Usages",
+    "noUsages": "No benefit usages this month",
+    "type": "Type",
+    "typeTotal": "Type Total",
+    "typePeriodic": "Periodic",
+    "periodYearly": "Yearly",
+    "periodMonthly": "Monthly",
+    "history": "History"
   }
 }

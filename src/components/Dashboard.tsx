@@ -243,7 +243,7 @@ export function Dashboard() {
                       viewPeriod === 'week' ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"
                     )}
                   >
-                    Week
+                    {t('common.week') || 'Week'}
                   </button>
                   <button 
                     onClick={() => setViewPeriod('month')}
@@ -252,7 +252,7 @@ export function Dashboard() {
                       viewPeriod === 'month' ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"
                     )}
                   >
-                    Month
+                    {t('common.month') || 'Month'}
                   </button>
                   <button 
                     onClick={() => setViewPeriod('quarter')}
@@ -261,7 +261,7 @@ export function Dashboard() {
                       viewPeriod === 'quarter' ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"
                     )}
                   >
-                    Quarter
+                    {t('common.quarter') || 'Quarter'}
                   </button>
                   <button 
                     onClick={() => setViewPeriod('year')}
@@ -270,7 +270,7 @@ export function Dashboard() {
                       viewPeriod === 'year' ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"
                     )}
                   >
-                    Year
+                    {t('common.year') || 'Year'}
                   </button>
                 </div>
 
@@ -307,7 +307,7 @@ export function Dashboard() {
                   viewMetric === 'overview' ? "bg-white shadow-sm text-gray-900" : "text-gray-500 hover:text-gray-700"
                 )}
               >
-                Overview
+                {t('common.overview') || 'Overview'}
               </button>
               <button 
                 onClick={() => setViewMetric('netWorth')}

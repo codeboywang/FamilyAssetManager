@@ -322,11 +322,6 @@ export function RecordUpdate({ currentUser }: { currentUser?: any }) {
                           )}
                         </div>
                         {account.notes && <p className="text-xs text-gray-400 mt-1 truncate">{account.notes}</p>}
-                        {account.repayment_day && (
-                          <p className="text-xs text-orange-500 mt-1">
-                            {t('assets.repaymentDay')}: {account.repayment_day}
-                          </p>
-                        )}
                       </div>
 
                       <div className="flex flex-col items-end gap-1 w-full sm:w-auto">
@@ -421,30 +416,6 @@ export function RecordUpdate({ currentUser }: { currentUser?: any }) {
                             type="number"
                             className="w-full pl-6 pr-2 py-1 rounded border border-orange-200 focus:ring-1 focus:ring-orange-500 text-right text-xs bg-gray-50"
                             value={(parseFloat(records[account.id]?.repayment_principal || '0') + parseFloat(records[account.id]?.repayment_interest || '0')) || ''}
-                            readOnly
-                          />
-                        </div>
-                        <span className="font-medium text-orange-800">{t('record.repaymentPrincipal')}:</span>
-                        <div className="relative w-32">
-                          <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
-                            {getCurrencySymbol(account.currency)}
-                          </span>
-                          <input
-                            type="number"
-                            className="w-full pl-6 pr-2 py-1 rounded border border-orange-200 focus:ring-1 focus:ring-orange-500 text-right text-xs bg-gray-50"
-                            value={records[account.id]?.repayment_principal || ''}
-                            readOnly
-                          />
-                        </div>
-                        <span className="font-medium text-orange-800">{t('record.repaymentInterest')}:</span>
-                        <div className="relative w-32">
-                          <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
-                            {getCurrencySymbol(account.currency)}
-                          </span>
-                          <input
-                            type="number"
-                            className="w-full pl-6 pr-2 py-1 rounded border border-orange-200 focus:ring-1 focus:ring-orange-500 text-right text-xs bg-gray-50"
-                            value={records[account.id]?.repayment_interest || ''}
                             readOnly
                           />
                         </div>
@@ -704,10 +675,10 @@ export function RecordUpdate({ currentUser }: { currentUser?: any }) {
                       <div className="mt-2 text-xs bg-gray-50 p-2 rounded">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <span className="text-gray-500">Principal:</span> {h.old_repayment_principal} &rarr; {h.new_repayment_principal}
+                            <span className="text-gray-500">{t('record.repaymentPrincipal') || 'Principal'}:</span> {h.old_repayment_principal} &rarr; {h.new_repayment_principal}
                           </div>
                           <div>
-                            <span className="text-gray-500">Interest:</span> {h.old_repayment_interest} &rarr; {h.new_repayment_interest}
+                            <span className="text-gray-500">{t('record.repaymentInterest') || 'Interest'}:</span> {h.old_repayment_interest} &rarr; {h.new_repayment_interest}
                           </div>
                         </div>
                       </div>

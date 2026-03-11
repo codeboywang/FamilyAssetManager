@@ -153,6 +153,11 @@ async function startServer() {
       record_history: db.prepare('SELECT * FROM record_history').all(),
       renqing_records: db.prepare('SELECT * FROM renqing_records').all(),
       renqing_events: db.prepare('SELECT * FROM renqing_events').all(),
+      family_events: db.prepare('SELECT * FROM family_events').all(),
+      insurance_policies: db.prepare('SELECT * FROM insurance_policies').all(),
+      benefits: db.prepare('SELECT * FROM benefits').all(),
+      benefit_usages: db.prepare('SELECT * FROM benefit_usages').all(),
+      insurance_payments: db.prepare('SELECT * FROM insurance_payments').all(),
     };
     res.json(data);
   });
@@ -167,6 +172,11 @@ async function startServer() {
 
     const transaction = db.transaction(() => {
       // Clear all tables
+      db.prepare('DELETE FROM insurance_payments').run();
+      db.prepare('DELETE FROM benefit_usages').run();
+      db.prepare('DELETE FROM benefits').run();
+      db.prepare('DELETE FROM insurance_policies').run();
+      db.prepare('DELETE FROM family_events').run();
       db.prepare('DELETE FROM record_history').run();
       db.prepare('DELETE FROM records').run();
       db.prepare('DELETE FROM accounts').run();
@@ -180,7 +190,7 @@ async function startServer() {
       // Insert data
       // Helper to insert
       const insert = (table: string, rows: any[]) => {
-        if (rows.length === 0) return;
+        if (!rows || rows.length === 0) return;
         const keys = Object.keys(rows[0]);
         const placeholders = keys.map(() => '?').join(',');
         const stmt = db.prepare(`INSERT INTO ${table} (${keys.join(',')}) VALUES (${placeholders})`);
@@ -196,6 +206,11 @@ async function startServer() {
       insert('record_history', data.record_history || []);
       insert('renqing_records', data.renqing_records || []);
       insert('renqing_events', data.renqing_events || []);
+      insert('family_events', data.family_events || []);
+      insert('insurance_policies', data.insurance_policies || []);
+      insert('benefits', data.benefits || []);
+      insert('benefit_usages', data.benefit_usages || []);
+      insert('insurance_payments', data.insurance_payments || []);
     });
 
     try {
@@ -996,55 +1011,68 @@ async function startServer() {
   // Mock Data Endpoint
   app.post('/api/mock', (req, res) => {
     try {
-      // Ensure we have at least one member
-      let member = db.prepare('SELECT id FROM members LIMIT 1').get() as any;
-      if (!member) {
-        const stmt = db.prepare('INSERT INTO members (name, relation) VALUES (?, ?)');
-        const info = stmt.run('Mock User', 'Self');
-        member = { id: info.lastInsertRowid };
-      }
-
-      // Ensure we have categories
-      let assetCat = db.prepare('SELECT id FROM asset_categories WHERE type = ? LIMIT 1').get('ASSET') as any;
-      if (!assetCat) {
-        const stmt = db.prepare('INSERT INTO asset_categories (name, type) VALUES (?, ?)');
-        const info = stmt.run('Cash', 'ASSET');
-        assetCat = { id: info.lastInsertRowid };
-      }
-
-      let liabCat = db.prepare('SELECT id FROM asset_categories WHERE type = ? LIMIT 1').get('LIABILITY') as any;
-      if (!liabCat) {
-        const stmt = db.prepare('INSERT INTO asset_categories (name, type) VALUES (?, ?)');
-        const info = stmt.run('Credit Card', 'LIABILITY');
-        liabCat = { id: info.lastInsertRowid };
-      }
-
-      // Create accounts
-      const accStmt = db.prepare('INSERT INTO accounts (name, category_id, member_id, currency) VALUES (?, ?, ?, ?)');
-      const bankInfo = accStmt.run('Mock Bank', assetCat.id, member.id, 'CNY');
-      const cardInfo = accStmt.run('Mock Card', liabCat.id, member.id, 'CNY');
-
-      // Create records for the last 3 months
-      const today = new Date();
-      const recStmt = db.prepare('INSERT INTO records (account_id, amount, record_date) VALUES (?, ?, ?)');
-      const eventStmt = db.prepare('INSERT INTO family_events (title, description, event_date, family_id) VALUES (?, ?, ?, ?)');
-      const renqingStmt = db.prepare('INSERT INTO renqing_records (person, event, item, amount, type, record_date) VALUES (?, ?, ?, ?, ?, ?)');
+      const { memberId } = req.body || {};
       
-      for (let i = 0; i < 3; i++) {
-        const d = new Date(today.getFullYear(), today.getMonth() - i, 15);
-        const dateStr = d.toISOString().substring(0, 10);
+      const generateMockData = db.transaction(() => {
+        // Ensure we have at least one member
+        let member;
+        if (memberId) {
+          member = db.prepare('SELECT id FROM members WHERE id = ?').get(memberId) as any;
+        }
         
-        recStmt.run(bankInfo.lastInsertRowid, 50000 + Math.random() * 10000, dateStr);
-        recStmt.run(cardInfo.lastInsertRowid, 2000 + Math.random() * 1000, dateStr);
+        if (!member) {
+          member = db.prepare('SELECT id FROM members LIMIT 1').get() as any;
+        }
         
-        eventStmt.run(`Mock Event ${i}`, 'This is a mock event', dateStr, null);
-        renqingStmt.run('Mock Uncle', 'Wedding', 'Cash', 1000, 'OUT', dateStr);
-      }
+        if (!member) {
+          const stmt = db.prepare('INSERT INTO members (name, relation) VALUES (?, ?)');
+          const info = stmt.run('Mock User', 'Self');
+          member = { id: info.lastInsertRowid };
+        }
 
-      // Add insurance
-      const insStmt = db.prepare('INSERT INTO insurance_policies (name, type, company, premium, payment_period, start_date, end_date, insured_member_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-      insStmt.run('Mock Health Protect', 'Health', 'Mock Insurance Co', 5000, 'Yearly', '2023-01-01', '2024-01-01', member.id);
+        // Ensure we have categories
+        let assetCat = db.prepare('SELECT id FROM asset_categories WHERE type = ? LIMIT 1').get('ASSET') as any;
+        if (!assetCat) {
+          const stmt = db.prepare('INSERT INTO asset_categories (name, type) VALUES (?, ?)');
+          const info = stmt.run('Cash', 'ASSET');
+          assetCat = { id: info.lastInsertRowid };
+        }
 
+        let liabCat = db.prepare('SELECT id FROM asset_categories WHERE type = ? LIMIT 1').get('LIABILITY') as any;
+        if (!liabCat) {
+          const stmt = db.prepare('INSERT INTO asset_categories (name, type) VALUES (?, ?)');
+          const info = stmt.run('Credit Card', 'LIABILITY');
+          liabCat = { id: info.lastInsertRowid };
+        }
+
+        // Create accounts
+        const accStmt = db.prepare('INSERT INTO accounts (name, category_id, member_id, currency) VALUES (?, ?, ?, ?)');
+        const bankInfo = accStmt.run('Mock Bank', assetCat.id, member.id, 'CNY');
+        const cardInfo = accStmt.run('Mock Card', liabCat.id, member.id, 'CNY');
+
+        // Create records for the last 3 months
+        const today = new Date();
+        const recStmt = db.prepare('INSERT INTO records (account_id, amount, record_date) VALUES (?, ?, ?)');
+        const eventStmt = db.prepare('INSERT INTO family_events (title, description, event_date, family_id) VALUES (?, ?, ?, ?)');
+        const renqingStmt = db.prepare('INSERT INTO renqing_records (person, event, item, amount, type, record_date) VALUES (?, ?, ?, ?, ?, ?)');
+        
+        for (let i = 0; i < 3; i++) {
+          const d = new Date(today.getFullYear(), today.getMonth() - i, 15);
+          const dateStr = d.toISOString().substring(0, 10);
+          
+          recStmt.run(bankInfo.lastInsertRowid, 50000 + Math.random() * 10000, dateStr);
+          recStmt.run(cardInfo.lastInsertRowid, 2000 + Math.random() * 1000, dateStr);
+          
+          eventStmt.run(`Mock Event ${i}`, 'This is a mock event', dateStr, null);
+          renqingStmt.run('Mock Uncle', 'Wedding', 'Cash', 1000, 'OUT', dateStr);
+        }
+
+        // Add insurance
+        const insStmt = db.prepare('INSERT INTO insurance_policies (name, type, company, premium, payment_period, start_date, end_date, insured_member_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+        insStmt.run('Mock Health Protect', 'Health', 'Mock Insurance Co', 5000, 'Yearly', '2023-01-01', '2024-01-01', member.id);
+      });
+
+      generateMockData();
       res.json({ success: true });
     } catch (error) {
       console.error(error);

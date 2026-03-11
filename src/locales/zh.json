@@ -12,7 +12,14 @@
     "loginButton": "登录",
     "setupButton": "创建管理员",
     "passwordMismatch": "两次输入的密码不一致",
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "adminName": "管理员姓名",
+    "selectUser": "选择用户",
+    "setupDesc": "创建您的第一个管理员账户",
+    "loginDesc": "请登录以继续",
+    "enterName": "输入您的姓名",
+    "createPassword": "创建密码",
+    "enterPassword": "输入密码"
   },
   "families": {
     "title": "家庭管理",
@@ -27,7 +34,7 @@
     "dashboard": "仪表盘",
     "assets": "资产",
     "members": "成员",
-    "update": "记账",
+    "update": "更新",
     "settings": "设置",
     "save": "保存",
     "cancel": "取消",
@@ -54,7 +61,17 @@
     "search": "搜索",
     "logout": "退出登录",
     "export": "导出",
-    "decrypt": "解密并导入"
+    "decrypt": "解密并导入",
+    "notes": "备注",
+    "saveChanges": "保存更改",
+    "expand": "展开",
+    "collapse": "收起",
+    "week": "周",
+    "month": "月",
+    "quarter": "季度",
+    "year": "年",
+    "overview": "概览",
+    "confirm": "确认"
   },
   "renqing": {
     "title": "人情往来",
@@ -136,6 +153,8 @@
     "title": "家庭成员",
     "subtitle": "管理资产归属",
     "addMember": "添加成员",
+    "editMember": "编辑成员",
+    "role": "角色",
     "namePlaceholder": "姓名 (如：爸爸)",
     "rolePlaceholder": "角色 (选填)",
     "defaultRole": "成员",
@@ -203,7 +222,9 @@
       "yearly": "年交",
       "monthly": "月交",
       "one-time": "趸交(一次性)"
-    }
+    },
+    "payments": "保险缴费",
+    "noPayments": "本月暂无保险缴费记录"
   },
   "settings": {
     "title": "设置",
@@ -233,7 +254,11 @@
     "decryptBackup": "解密备份",
     "enterImportPassword": "输入用于加密此备份的密码。",
     "decryptFailed": "解密失败。密码错误？",
-    "importFailed": "导入失败。"
+    "importFailed": "导入失败。",
+    "confirmMockData": "确定要生成模拟数据吗？这将向您的数据库添加虚假记录。",
+    "mockDataFailed": "模拟数据生成失败",
+    "generateMockData": "生成模拟数据",
+    "mockDataSuccess": "模拟数据生成成功"
   },
   "categories": {
     "Cash & Demand Deposits": "现金或活期存款",
@@ -262,6 +287,14 @@
     "expired": "已过期",
     "usedUp": "已用完",
     "noBenefits": "暂无权益记录",
-    "addFirst": "添加您的第一项权益开始追踪。"
+    "addFirst": "添加您的第一项权益开始追踪。",
+    "usages": "权益使用记录",
+    "noUsages": "本月暂无权益使用记录",
+    "type": "类型",
+    "typeTotal": "类型总计",
+    "typePeriodic": "周期性",
+    "periodYearly": "每年",
+    "periodMonthly": "每月",
+    "history": "使用历史"
   }
 }

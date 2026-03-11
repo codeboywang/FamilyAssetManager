@@ -313,9 +313,9 @@ export function Members() {
       {/* Edit Modal */}
       {editingMember && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-              <h3 className="font-bold text-lg text-gray-900">Edit Member</h3>
+              <h3 className="font-bold text-lg text-gray-900">{t('members.editMember') || 'Edit Member'}</h3>
               <button onClick={() => setEditingMember(null)} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
               </button>
@@ -323,7 +323,7 @@ export function Members() {
             
             <form onSubmit={handleUpdateMember} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('common.name') || 'Name'}</label>
                 <input
                   type="text"
                   value={editName}
@@ -334,7 +334,7 @@ export function Members() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('members.role') || 'Role'}</label>
                 <input
                   type="text"
                   value={editRole}
@@ -400,7 +400,7 @@ export function Members() {
                   type="submit"
                   className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-medium"
                 >
-                  Save Changes
+                  {t('common.saveChanges') || 'Save Changes'}
                 </button>
               </div>
             </form>

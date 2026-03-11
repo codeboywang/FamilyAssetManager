@@ -100,7 +100,7 @@ export function Login({ onLogin }: LoginProps) {
     }
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-stone-100">Loading...</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-stone-100">{t('common.loading') || 'Loading...'}</div>;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-stone-100 p-4">
@@ -115,7 +115,7 @@ export function Login({ onLogin }: LoginProps) {
           {isSetup ? t('auth.adminSetupTitle') : t('auth.loginTitle')}
         </h1>
         <p className="text-center text-stone-500 mb-8">
-          {isSetup ? 'Create your first admin account' : 'Please login to continue'}
+          {isSetup ? (t('auth.setupDesc') || 'Create your first admin account') : (t('auth.loginDesc') || 'Please login to continue')}
         </p>
 
         {error && (
@@ -127,7 +127,7 @@ export function Login({ onLogin }: LoginProps) {
         {isSetup ? (
           <form onSubmit={handleSetup} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">Admin Name</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1">{t('auth.adminName') || 'Admin Name'}</label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
                 <input
@@ -135,13 +135,13 @@ export function Login({ onLogin }: LoginProps) {
                   value={setupName}
                   onChange={(e) => setSetupName(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  placeholder="Enter your name"
+                  placeholder={t('auth.enterName') || 'Enter your name'}
                   required
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">Password</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1">{t('auth.password')}</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
                 <input
@@ -149,7 +149,7 @@ export function Login({ onLogin }: LoginProps) {
                   value={setupPassword}
                   onChange={(e) => setSetupPassword(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  placeholder="Create a password"
+                  placeholder={t('auth.createPassword') || 'Create a password'}
                   required
                 />
               </div>
@@ -159,13 +159,13 @@ export function Login({ onLogin }: LoginProps) {
               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-xl transition-colors flex items-center justify-center gap-2"
             >
               <UserPlus className="w-5 h-5" />
-              Create Admin
+              {t('auth.setupButton')}
             </button>
           </form>
         ) : (
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">Select User</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1">{t('auth.selectUser') || 'Select User'}</label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
                 <select
@@ -181,7 +181,7 @@ export function Login({ onLogin }: LoginProps) {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">Password</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1">{t('auth.password')}</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
                 <input
@@ -189,7 +189,7 @@ export function Login({ onLogin }: LoginProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  placeholder="Enter password"
+                  placeholder={t('auth.enterPassword') || 'Enter password'}
                   required
                 />
               </div>
@@ -198,7 +198,7 @@ export function Login({ onLogin }: LoginProps) {
               type="submit"
               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-xl transition-colors"
             >
-              Login
+              {t('auth.loginButton')}
             </button>
           </form>
         )}

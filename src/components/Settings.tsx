@@ -266,7 +266,11 @@ export function Settings({ currentUser }: { currentUser: any }) {
   const confirmGenerateMockData = async () => {
     setShowMockDataConfirm(false);
     try {
-      const res = await fetch('/api/mock', { method: 'POST' });
+      const res = await fetch('/api/mock', { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ memberId: currentUser?.id })
+      });
       if (res.ok) {
         setNotification({ message: t('settings.mockDataSuccess') || 'Mock data generated successfully', type: 'success' });
         setTimeout(() => window.location.reload(), 1500);
@@ -284,7 +288,7 @@ export function Settings({ currentUser }: { currentUser: any }) {
       {showMockDataConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden p-6">
-            <h3 className="font-bold text-lg text-gray-900 mb-2">{t('common.confirmDelete')}</h3>
+            <h3 className="font-bold text-lg text-gray-900 mb-2">{t('settings.generateMockData') || 'Generate Mock Data'}</h3>
             <p className="text-gray-500 mb-6">{t('settings.confirmMockData') || 'Are you sure you want to generate mock data? This will add fake records to your database.'}</p>
             <div className="flex gap-3">
               <button
