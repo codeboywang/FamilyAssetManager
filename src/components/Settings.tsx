@@ -5,6 +5,9 @@ import JSZip from 'jszip';
 
 async function encryptData(data: string, password: string): Promise<{ encrypted: ArrayBuffer, iv: Uint8Array, salt: Uint8Array }> {
   const enc = new TextEncoder();
+  if (!crypto.subtle) {
+    throw new Error('Web Crypto API (subtle) is not available. This usually means you are not in a Secure Context (HTTPS).');
+  }
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(password), { name: "PBKDF2" }, false, ["deriveKey"]);
   const key = await crypto.subtle.deriveKey(
@@ -21,6 +24,9 @@ async function encryptData(data: string, password: string): Promise<{ encrypted:
 
 async function decryptData(encrypted: ArrayBuffer, password: string, iv: Uint8Array, salt: Uint8Array): Promise<string> {
   const enc = new TextEncoder();
+  if (!crypto.subtle) {
+    throw new Error('Web Crypto API (subtle) is not available. This usually means you are not in a Secure Context (HTTPS).');
+  }
   const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(password), { name: "PBKDF2" }, false, ["deriveKey"]);
   const key = await crypto.subtle.deriveKey(
     { name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" },
@@ -50,6 +56,7 @@ export function Settings({ currentUser }: { currentUser: any }) {
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
   const [showExportPasswordModal, setShowExportPasswordModal] = useState(false);
   const [exportPassword, setExportPassword] = useState('');
+  const [exportEncrypted, setExportEncrypted] = useState(window.isSecureContext && !!crypto.subtle);
   const [showImportPasswordModal, setShowImportPasswordModal] = useState(false);
   const [importPassword, setImportPassword] = useState('');
   const [pendingImportFile, setPendingImportFile] = useState<File | null>(null);
@@ -111,30 +118,47 @@ export function Settings({ currentUser }: { currentUser: any }) {
   };
 
   const performExport = async () => {
-    if (!exportPassword) {
+    if (exportEncrypted && !exportPassword) {
       setNotification({ message: t('settings.passwordRequired'), type: 'error' });
+      return;
+    }
+
+    if (exportEncrypted && (!window.isSecureContext || !crypto.subtle)) {
+      setNotification({ message: t('settings.secureContextRequired'), type: 'error' });
       return;
     }
 
     try {
       const res = await fetch('/api/export');
+      if (!res.ok) {
+        throw new Error(`Export API failed: ${res.status}`);
+      }
       const data = await res.json();
       const jsonString = JSON.stringify(data, null, 2);
 
-      const { encrypted, iv, salt } = await encryptData(jsonString, exportPassword);
-      const zip = new JSZip();
-      zip.file('data.enc', encrypted);
-      zip.file('meta.json', JSON.stringify({ 
-        iv: Array.from(iv), 
-        salt: Array.from(salt),
-        version: 1 
-      }));
-      
-      const content = await zip.generateAsync({ type: 'blob' });
+      let content: Blob;
+      let filename: string;
+
+      if (exportEncrypted) {
+        const { encrypted, iv, salt } = await encryptData(jsonString, exportPassword);
+        const zip = new JSZip();
+        zip.file('data.enc', encrypted);
+        zip.file('meta.json', JSON.stringify({ 
+          iv: Array.from(iv), 
+          salt: Array.from(salt),
+          version: 1 
+        }));
+        content = await zip.generateAsync({ type: 'blob' });
+        filename = `family_assets_backup_secure_${new Date().toISOString().split('T')[0]}.zip`;
+      } else {
+        content = new Blob([jsonString], { type: 'application/json' });
+        filename = `family_assets_backup_plain_${new Date().toISOString().split('T')[0]}.json`;
+      }
+
       const url = URL.createObjectURL(content);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `family_assets_backup_secure_${new Date().toISOString().split('T')[0]}.zip`;
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -185,6 +209,11 @@ export function Settings({ currentUser }: { currentUser: any }) {
 
   const performSecureImport = async () => {
     if (!pendingImportFile || !importPassword) return;
+
+    if (!window.isSecureContext || !crypto.subtle) {
+      setNotification({ message: t('settings.secureContextRequired'), type: 'error' });
+      return;
+    }
 
     try {
       const zip = await JSZip.loadAsync(pendingImportFile);
@@ -441,6 +470,15 @@ export function Settings({ currentUser }: { currentUser: any }) {
             <h3 className="text-lg font-medium text-gray-900 mb-1">{t('settings.dataManagement')}</h3>
             <p className="text-sm text-gray-500 mb-4">{t('settings.dataDesc') || 'Export your data securely or import from a backup.'}</p>
             
+            {!window.isSecureContext && (
+              <div className="mb-4 p-3 bg-red-50 rounded-lg border border-red-100 flex items-start gap-3">
+                <Shield className="text-red-500 shrink-0" size={18} />
+                <p className="text-xs text-red-800 leading-relaxed">
+                  {t('settings.secureContextRequired')}
+                </p>
+              </div>
+            )}
+            
             <div className="flex flex-wrap gap-4 mt-6">
               <button
                 onClick={handleExportClick}
@@ -633,21 +671,52 @@ export function Settings({ currentUser }: { currentUser: any }) {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-xl">
             <div className="flex items-center gap-3 mb-4 text-indigo-600">
-              <Lock size={24} />
-              <h3 className="text-lg font-bold text-gray-900">{t('settings.secureExport') || 'Secure Export'}</h3>
+              <Shield size={24} />
+              <h3 className="text-lg font-bold text-gray-900">{t('settings.exportData')}</h3>
             </div>
-            <p className="text-gray-600 mb-4 text-sm">
-              {t('settings.setExportPassword') || 'Set a password to encrypt your backup file. You will need this password to restore your data.'}
-            </p>
-            <input
-              type="password"
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-6"
-              placeholder={t('auth.password') || 'Password'}
-              value={exportPassword}
-              onChange={e => setExportPassword(e.target.value)}
-              autoFocus
-            />
-            <div className="flex justify-end gap-3">
+            
+            <div className="space-y-4">
+              <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors">
+                <input
+                  type="checkbox"
+                  checked={exportEncrypted}
+                  onChange={(e) => setExportEncrypted(e.target.checked)}
+                  disabled={!window.isSecureContext || !crypto.subtle}
+                  className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+                />
+                <div className="flex-1">
+                  <span className="text-sm font-medium text-gray-900">{t('settings.encryptBackup')}</span>
+                  {(!window.isSecureContext || !crypto.subtle) && (
+                    <p className="text-xs text-red-600 mt-0.5">{t('settings.secureContextRequired')}</p>
+                  )}
+                </div>
+              </label>
+
+              {exportEncrypted ? (
+                <>
+                  <p className="text-gray-600 text-sm">
+                    {t('settings.setExportPassword') || 'Set a password to encrypt your backup file. You will need this password to restore your data.'}
+                  </p>
+                  <input
+                    type="password"
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder={t('auth.password') || 'Password'}
+                    value={exportPassword}
+                    onChange={e => setExportPassword(e.target.value)}
+                    autoFocus
+                  />
+                </>
+              ) : (
+                <div className="p-3 bg-amber-50 rounded-lg border border-amber-100 flex items-start gap-3">
+                  <Info className="text-amber-500 shrink-0 mt-0.5" size={16} />
+                  <p className="text-xs text-amber-800 leading-relaxed">
+                    {t('settings.unencryptedWarning')}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-3 mt-6">
               <button 
                 onClick={() => { setShowExportPasswordModal(false); setExportPassword(''); }}
                 className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm font-medium"
@@ -656,7 +725,7 @@ export function Settings({ currentUser }: { currentUser: any }) {
               </button>
               <button 
                 onClick={performExport}
-                disabled={!exportPassword}
+                disabled={exportEncrypted && !exportPassword}
                 className="px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg text-sm font-medium disabled:opacity-50"
               >
                 {t('common.export') || 'Export'}

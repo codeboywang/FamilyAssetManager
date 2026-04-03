@@ -1,5 +1,8 @@
 FROM m.daocloud.io/docker.io/library/node:20-alpine
 
+# Install build dependencies for better-sqlite3
+RUN apk add --no-cache python3 build-base
+
 WORKDIR /app
 
 # Copy package.json and package-lock.json (if available)
